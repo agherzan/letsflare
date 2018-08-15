@@ -7,6 +7,10 @@ CONFIG_DIR=/etc/letsencrypt
 WORK_DIR=/var/lib/letsencrypt
 LOGS_DIR=/var/log/letsencrypt
 
+. /etc/simple-logging.sh
+
+loginfo "Setting initial letsencrypt certificates..."
+
 mkdir -p "$CONFIG_DIR" "$WORK_DIR" "$LOGS_DIR"
 chown -R abc:abc "$CONFIG_DIR" "$WORK_DIR" "$LOGS_DIR"
 
