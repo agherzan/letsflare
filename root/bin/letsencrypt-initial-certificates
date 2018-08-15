@@ -8,8 +8,8 @@ CERTBOT=${CERTBOT:-certbot}
 
 function letsencrypt_generate {
 	local _domain="$1"
-	if 	[ -f "$LETSENCRYPT_PATH/$_domain/privkey.pem" ] && \
-		[ -f "$LETSENCRYPT_PATH/$_domain/fullchain.pem" ]; then
+	if 	[ -L "$LETSENCRYPT_PATH/$_domain/privkey.pem" ] && \
+		[ -L "$LETSENCRYPT_PATH/$_domain/fullchain.pem" ]; then
 		loginfo "$_domain letsencrypt certificate in place."
 	else
 		loginfo "Generating new letsencrypt certificate for $_domain ..."
