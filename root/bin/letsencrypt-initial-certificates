@@ -1,0 +1,32 @@
+#!/bin/bash
+
+LETSENCRYPT_PATH=/etc/letsencrypt/live
+CLOUDFLARE_CREDS=/etc/cloudflare/creds.ini
+CERTBOT=${CERTBOT:-certbot}
+
+. /etc/simple-logging.sh
+
+function letsencrypt_generate {
+	local _domain="$1"
+	if 	[ -f "$LETSENCRYPT_PATH/$_domain/privkey.pem" ] && \
+		[ -f "$LETSENCRYPT_PATH/$_domain/fullchain.pem" ]; then
+		loginfo "$_domain letsencrypt certificate in place."
+	else
+		loginfo "Generating new letsencrypt certificate for $_domain ..."
+		if $CERTBOT certonly --register-unsafely-without-email --agree-tos \
+			 --dns-cloudflare --dns-cloudflare-credentials "$CLOUDFLARE_CREDS" \
+			 -d "$_domain"; then
+			loginfo "$_domain new certificate done."
+		else
+			logerror "$_domain new certificate generation failed. See above."
+		fi
+
+	fi
+}
+
+[ -z "$DOMAINS" ] && logerror "No DOMAINS defined. Please set this environment variable."
+for domain in $DOMAINS; do
+	letsencrypt_generate "$domain"
+done
+
+chown -R abc:abc $LETSENCRYPT_PATH

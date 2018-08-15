@@ -1,0 +1,18 @@
+#!/usr/bin/with-contenv bash
+#
+# Renew certificates regularly
+#
+
+RENEWAL_TIMEOUT=${RENEWAL_TIMEOUT:-86400}
+
+. /etc/simple-logging.sh
+
+while true; do
+	sleep "$RENEWAL_TIMEOUT"
+	loginfo "Renewing certificates..."
+	if s6-setuidgid abc certbot renew; then
+		loginfo "Renewal done."
+	else
+		logwarn "Renewal failed. See above."
+	fi
+done
