@@ -8,6 +8,6 @@ WORK_DIR=/var/lib/letsencrypt
 LOGS_DIR=/var/log/letsencrypt
 
 mkdir -p "$CONFIG_DIR" "$WORK_DIR" "$LOGS_DIR"
-chown -R abc:users "$CONFIG_DIR" "$WORK_DIR" "$LOGS_DIR"
+chown -R abc:abc "$CONFIG_DIR" "$WORK_DIR" "$LOGS_DIR"
 
-s6-envuidgid abc letsencrypt-initial-certificates
+s6-setuidgid abc letsencrypt-initial-certificates
